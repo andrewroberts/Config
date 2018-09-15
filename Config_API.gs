@@ -68,9 +68,7 @@ function set(args)        {return eventHandler_(EVENT_HANDLERS_.set, args)}
 
 function eventHandler_(config, args) {
 
-  try {
-
-    var userEmail = Session.getActiveUser().getEmail()    
+    var userEmail = Session.getActiveUser().getEmail()
     var sendErrorEmail = userEmail ? SEND_ERROR_EMAIL_ : false 
 
     Log_ = BBLog.getLog({
@@ -78,34 +76,12 @@ function eventHandler_(config, args) {
       displayFunctionNames: DEBUG_LOG_DISPLAY_FUNCTION_NAMES_,
       sheetId:              LOG_SHEET_ID_,
     })
-    
+        
     Log_.info('Handling ' + config[0] + ' from ' + (userEmail || 'unknown email') + ' (' + SCRIPT_NAME + ' ' + SCRIPT_VERSION + ')')
     
     // Call the main function
     return config[2](args)
     
-  } catch (error) {
-  
-    var handleError = Assert.HandleError.DISPLAY_FULL
-
-    if (!PRODUCTION_VERSION_) {
-      handleError = Assert.HandleError.THROW
-    }
-
-    var assertConfig = {
-      error:          error,
-      userMessage:    config[1],
-      log:            Log_,
-      handleError:    handleError, 
-      sendErrorEmail: sendErrorEmail, 
-      emailAddress:   ADMIN_EMAIL_ADDRESS_,
-      scriptName:     SCRIPT_NAME,
-      scriptVersion:  SCRIPT_VERSION, 
-    }
-
-    Assert.handleError(assertConfig) 
-  }
-  
 } // eventHandler_()
 
 // Private event handlers
@@ -128,6 +104,8 @@ function initialise_(config) {
   
   var email = config.email
   Assert.assertDefined(email, callingfunction, 'No email provided')
+  Assert.assertString(email, callingfunction, 'Email not a string')
+  Assert.assert(email !== '', callingfunction, 'Empty email address')
   
   var spreadsheetId = config.spreadsheetId
   Assert.assertDefined(spreadsheetId, callingfunction, 'No spreadsheet ID provided')
@@ -222,7 +200,7 @@ function get_(key) {
     })
     .getProperty(email)
     
-  Assert.assertNotNull(configSheetId, callingfunction, 'Run setup before trying to get values')
+  Assert.assertNotNull(configSheetId, callingfunction, 'Run setup on config sheet before trying to get values')
   
   var configSpreadsheet = SpreadsheetApp.openById(configSheetId)
   Assert.assertNotNull(configSpreadsheet, callingfunction, 'Can not open config GSheet')
