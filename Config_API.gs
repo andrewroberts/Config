@@ -70,7 +70,8 @@ function eventHandler_(config, args) {
 
   try {
 
-    var userEmail = Session.getActiveUser().getEmail()
+    var userEmail = Session.getActiveUser().getEmail()    
+    var sendErrorEmail = userEmail ? SEND_ERROR_EMAIL_ : false 
 
     Log_ = BBLog.getLog({
       level:                DEBUG_LOG_LEVEL_, 
@@ -96,7 +97,7 @@ function eventHandler_(config, args) {
       userMessage:    config[1],
       log:            Log_,
       handleError:    handleError, 
-      sendErrorEmail: SEND_ERROR_EMAIL_, 
+      sendErrorEmail: sendErrorEmail, 
       emailAddress:   ADMIN_EMAIL_ADDRESS_,
       scriptName:     SCRIPT_NAME,
       scriptVersion:  SCRIPT_VERSION, 
