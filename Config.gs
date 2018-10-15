@@ -22,7 +22,7 @@
 // =============
 
 var SCRIPT_NAME = "Config"
-var SCRIPT_VERSION = "v1.2"
+var SCRIPT_VERSION = "v1.2.dev_ajr"
 
 var PRODUCTION_VERSION_ = true
 
