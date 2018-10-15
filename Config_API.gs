@@ -63,7 +63,7 @@ function set(args)        {return eventHandler_(EVENT_HANDLERS_.set, args)}
  *   [2] {String} onErrorMessage
  *   [3] {Function} mainFunction
  *
- * @param {Object}   arg1       The argument passed to the top-level event handler
+ * @param {Object}   args       The argument passed to the top-level event handler
  */
 
 function eventHandler_(config, args) {
@@ -134,12 +134,16 @@ function initialise_(config) {
  * @return {object}
  */
  
-function set_() {
+function set_(config) {
 
   Log_.functionEntryPoint()
   var callingfunction = 'set_()'
-/*  
+  
+  var key = config.key
+  var value = config.value
+  
   Assert.assertDefined(key, callingfunction, 'No config key provided')
+  Assert.assertDefined(value, callingfunction, 'No value provided')
    
   var email = Session.getActiveUser().getEmail()
   
@@ -158,20 +162,25 @@ function set_() {
   var configSpreadsheet = SpreadsheetApp.openById(configSheetId)
   Assert.assertNotNull(configSpreadsheet, callingfunction, 'Can not open config GSheet')
   var configSheet = configSpreadsheet.getSheetByName(CONFIG_SHEET_NAME_)
-  var allValues = configSheet.getSheetValues(2, 1, configSheet.getLastRow() - 1, 2) 
-  var value = null
+  Assert.assertNotNull(configSheet, callingfunction, 'There is no "' + CONFIG_SHEET_NAME_ + '" tab')
+  var numberOfRows = configSheet.getLastRow() - 1
+  var allValues = configSheet.getSheetValues(2, 1, numberOfRows, 2) 
 
-  allValues.some(function(row) {
-    if (row[0] === key) {
-      value = row[1]
-      return true
+  for (var rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
+    if (allValues[rowIndex][0] === key) {
+      configSheet.getRange(rowIndex + 2, 2).setValue(value)   
+      break
     }
-  })
+  }
   
-  Log_.info(email + ' got ' + value + ' from ' + configSheetId)
-  return value
-*/  
-} // set_() 
+  if (rowIndex === numberOfRows) {
+    throw new Error('Could not find "' + key + '"')
+  }
+  
+  Log_.info(email + ' set ' + key + ' to value "' + value + '"')
+  return 
+  
+} // Config.set_() 
 
 /**
  * Get a configuration value
@@ -215,7 +224,7 @@ function get_(key) {
     }
   })
   
-  Log_.info(email + ' got ' + value + ' from ' + configSheetId)
+  Log_.info(email + ' got value "' + value + '" from ' + configSheetId)
   return value
 
 } // Config.get_() 

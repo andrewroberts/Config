@@ -22,7 +22,7 @@
 // =============
 
 var SCRIPT_NAME = "Config"
-var SCRIPT_VERSION = "v1.1"
+var SCRIPT_VERSION = "v1.2"
 
 var PRODUCTION_VERSION_ = true
 
@@ -30,9 +30,10 @@ var PRODUCTION_VERSION_ = true
 // -----------
 
 var DEBUG_LOG_LEVEL_ = PRODUCTION_VERSION_ ? BBLog.Level.INFO : BBLog.Level.FINER
-var DEBUG_LOG_DISPLAY_FUNCTION_NAMES_ = PRODUCTION_VERSION_ ? BBLog.DisplayFunctionNames.NO : BBLog.DisplayFunctionNames.NO
+var DEBUG_LOG_DISPLAY_FUNCTION_NAMES_ = PRODUCTION_VERSION_ ? BBLog.DisplayFunctionNames.NO : BBLog.DisplayFunctionNames.YES
 
-var LOG_SHEET_ID_ = '1jDRHqG5dNr7_9qwYvdiTETNA-shJaHLuES_kaZXJT7w'
+var LOG_SHEET_ID_ = '1jDRHqG5dNr7_9qwYvdiTETNA-shJaHLuES_kaZXJT7w' // Config Master Log
+// var LOG_SHEET_ID_ = '1VmbQwP1CBMkQCom2wrHRQQZ3qUl2icd9FKdjXXjOE0k' // Config Test Sheet
 
 // Assert library
 // --------------
