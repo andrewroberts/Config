@@ -41,11 +41,13 @@ var EVENT_HANDLERS_ = {
   initialise:                ['initialise()',                'Failed to initialise',                  initialise_],
   get:                       ['get()',                       'Failed to get',                         get_],
   set:                       ['set()',                       'Failed to set',                         set_],
+  dumpUsers:                 ['dumpUsers()',                 'Failed to dump users',                  dumpUsers_],
 }
 
 function initialise(args) {return eventHandler_(EVENT_HANDLERS_.initialise, args)}
 function get(args)        {return eventHandler_(EVENT_HANDLERS_.get, args)}
 function set(args)        {return eventHandler_(EVENT_HANDLERS_.set, args)}
+function dumpUsers(args)  {return eventHandler_(EVENT_HANDLERS_.dumpUsers, args)}
 
 // Private Functions
 // =================
@@ -120,8 +122,6 @@ function initialise_(config) {
     })
     .setProperty(email, spreadsheetId)
     
-  SpreadsheetApp.getUi().alert(email + ' associated with config sheet "' + spreadsheetId + '"')
-
 } // Config.initialise() 
 
 /**
@@ -197,7 +197,7 @@ function get_(key) {
   
   Assert.assertDefined(key, callingfunction, 'No config key provided')
    
-  var email = Session.getActiveUser().getEmail()
+  var email = Session.getEffectiveUser().getEmail()
   
   var configSheetId = Store
     .getStore({
@@ -228,3 +228,19 @@ function get_(key) {
   return value
 
 } // Config.get_() 
+
+/**
+ * dump users table
+ *
+ * @param {object} 
+ *
+ * @return {object}
+ */
+
+function dumpUsers_() {
+
+  Log_.functionEntryPoint()
+  var table = PropertiesService.getScriptProperties().getProperties()
+  SpreadsheetApp.getUi().alert(JSON.stringify(table))
+
+} // dumpUsers_() 
