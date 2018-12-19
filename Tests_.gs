@@ -8,6 +8,14 @@
 // Code for internal/unit testing
 
 /*
+16Nov2018
+{
+  "ccn.comms@gmail.com":"1FgybOOgK6jfUls2AJSQOu_QZcTMcsGgPmc53Z2hQeLk",
+  "andrew@cloudfire.media":"160zxGvcoNHf6kmrDkCTdBcXlRdjU30cjFy03sqSIX_w"
+}
+*/
+
+/*
 14Oct2018
 
 {
