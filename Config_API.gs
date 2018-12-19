@@ -72,11 +72,14 @@ function eventHandler_(config, args) {
 
     var userEmail = Session.getActiveUser().getEmail()
     var sendErrorEmail = userEmail ? SEND_ERROR_EMAIL_ : false 
+    
+    var activeSpreadsheet = SpreadsheetApp.getActive() 
+    var logSheetId = (activeSpreadsheet === null) ? LOG_SHEET_ID_ : activeSpreadsheet.getId()
 
     Log_ = BBLog.getLog({
       level:                DEBUG_LOG_LEVEL_, 
       displayFunctionNames: DEBUG_LOG_DISPLAY_FUNCTION_NAMES_,
-      sheetId:              LOG_SHEET_ID_,
+      sheetId:              logSheetId,
     })
         
     Log_.info('Handling ' + config[0] + ' from ' + (userEmail || 'unknown email') + ' (' + SCRIPT_NAME + ' ' + SCRIPT_VERSION + ')')
@@ -130,8 +133,6 @@ function initialise_(config) {
  * @param {object} 
  *   {string} key
  *   {object} value
- *
- * @return {object}
  */
  
 function set_(config) {
@@ -224,7 +225,14 @@ function get_(key) {
     }
   })
   
-  Log_.info(email + ' got value "' + value + '" from ' + configSheetId)
+  if (value === '') {
+    throw new Error('There is no value for ' + key + ' in ' + configSheetId)
+  } else if (value === null) {
+    throw new Error('There is no ' + key + ' key in ' + configSheetId)  
+  } else {
+    Log_.info(email + ' got value "' + value + '" from ' + configSheetId + ' for ' + key)
+  }
+  
   return value
 
 } // Config.get_() 
